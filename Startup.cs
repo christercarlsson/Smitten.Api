@@ -6,24 +6,50 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Smitten.Api.Entities;
+using Microsoft.EntityFrameworkCore;
+using Smitten.Api.Services;
 
 namespace Smitten.Api
 {
     public class Startup
     {
+        private IConfiguration _config;
+
+        public Startup(IConfiguration configuration)
+        {
+            _config = configuration;
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddSingleton(_config);
+
+            services.AddMvc(setupAction => {
+                setupAction.ReturnHttpNotAcceptable = true;
+                setupAction.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
+                setupAction.InputFormatters.Add(new XmlDataContractSerializerInputFormatter());
+            });
+            
+            services.AddDbContext<SmittenContext>(o => {
+                o.UseSqlServer(_config["ConnectionStrings:DefaultConnection"]);
+                });
+
+            services.AddScoped<ISmittenRepository, SmittenRepository>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, SmittenContext smittenContext)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                smittenContext.EnsureSeedDataForDevelopment();
             }
             app.UseMvc();
         }
