@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Smitten.Api", "Smitten.Api.csproj", "{384F8217-EDE5-4A23-A6D9-A4AB6BF518F4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{384F8217-EDE5-4A23-A6D9-A4AB6BF518F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{384F8217-EDE5-4A23-A6D9-A4AB6BF518F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{384F8217-EDE5-4A23-A6D9-A4AB6BF518F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{384F8217-EDE5-4A23-A6D9-A4AB6BF518F4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6295B720-3831-4779-921D-48281D5CDC87}
+	EndGlobalSection
+EndGlobal
