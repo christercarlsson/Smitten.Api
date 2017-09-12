@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Smitten.Api.Entities;
 using Microsoft.EntityFrameworkCore;
+using Smitten.Api.Services;
 
 namespace Smitten.Api
 {
@@ -26,15 +27,19 @@ namespace Smitten.Api
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(_config);
+
             services.AddMvc(setupAction => {
                 setupAction.ReturnHttpNotAcceptable = true;
                 setupAction.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
                 setupAction.InputFormatters.Add(new XmlDataContractSerializerInputFormatter());
             });
-
+            
             services.AddDbContext<SmittenContext>(o => {
                 o.UseSqlServer(_config["ConnectionStrings:DefaultConnection"]);
                 });
+
+            services.AddScoped<ISmittenRepository, SmittenRepository>();
 
         }
 
