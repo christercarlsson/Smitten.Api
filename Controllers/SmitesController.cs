@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Smitten.Api.Models;
+using Smitten.Api.Entities;
 
 namespace Smitten.Api.Controllers
 {
@@ -42,6 +43,36 @@ namespace Smitten.Api.Controllers
 
             var smiteForPerson = Mapper.Map<SmiteDto>(smiteFromRepo);
             return Ok(smiteForPerson);
+        }
+
+        [HttpPost()]
+        public IActionResult CreateSmiteForPerson(Guid personId, [FromBody]SmiteForCreationDto smite)
+        {
+            if (smite == null)
+                return BadRequest();
+            if (!ModelState.IsValid)
+                return new StatusCodeResult(422); // Fix this later...
+            if (!_repository.PersonExists(personId))
+                return NotFound();
+
+            var smiteEntity = Mapper.Map<Smite>(smite);
+
+            _repository.AddSmiteForPerson(personId, smiteEntity);
+
+            if (!_repository.Save())
+                throw new Exception($"Creating smite for person {personId} failed, try again later...");
+
+            var smiteToReturn = Mapper.Map<SmiteDto>(smiteEntity);
+
+            return CreatedAtRoute(
+                nameof(GetSmiteForPerson),
+                new
+                {
+                    personId = personId,
+                    smiteId = smiteEntity.Id
+                },
+                smiteToReturn
+            );
         }
     }
 }

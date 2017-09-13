@@ -53,9 +53,7 @@ namespace Smitten.Api.Services
         public IEnumerable<Person> GetPeople()
         {
             return _context.People
-                .Include(p => p.Smites)
-                .OrderByDescending(p => p.Smites.Count)
-                .ThenBy(p => p.FirstName)
+                .OrderBy(p => p.FirstName)
                 .ThenBy(p => p.LastName);
         }
 
