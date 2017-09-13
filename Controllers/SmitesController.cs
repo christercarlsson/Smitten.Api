@@ -74,5 +74,20 @@ namespace Smitten.Api.Controllers
                 smiteToReturn
             );
         }
+        [HttpDelete("{id}")]
+        public IActionResult DeleteSmite(Guid personId, Guid id)
+        {
+            if (!_repository.PersonExists(personId))
+                return NotFound();
+            var smiteFromRepo = _repository.GetSmiteForPerson(personId, id);
+            if (smiteFromRepo == null)
+                return NotFound();
+            _repository.DeleteSmite(smiteFromRepo);
+
+            if (!_repository.Save())
+                throw new Exception($"Deleting smite {id} for Person {personId} failed on save, try again later");
+
+            return NoContent();
+        }
     }
 }
