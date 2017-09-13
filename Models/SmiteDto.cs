@@ -6,8 +6,6 @@ namespace Smitten.Api.Models
     {
         public Guid Id { get; set; }
         public DateTimeOffset Date { get; set; }
-
         public Guid PersonId { get; set; }
-        public PersonDto Person { get; set; }
     }
 }

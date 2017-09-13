@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Smitten.Api.Models;
 
 namespace Smitten.Api.Controllers
 {
@@ -17,15 +19,15 @@ namespace Smitten.Api.Controllers
             _repository = repository;
         }
 
-        [HttpGet]
+        [HttpGet()]
         public IActionResult GetSmitesForPerson(Guid personId)
         {
             if (!_repository.PersonExists(personId))
                 return NotFound();
             var smitesFromRepo = _repository.GetSmitesForPerson(personId);
 
-            // Map to Dto before return...
-            return Ok(smitesFromRepo);
+            var smitesForPerson = Mapper.Map<IEnumerable<SmiteDto>>(smitesFromRepo);
+            return Ok(smitesForPerson);
         }
 
         [HttpGet("{smiteId}", Name = nameof(GetSmiteForPerson))]
@@ -38,8 +40,8 @@ namespace Smitten.Api.Controllers
             if (smiteFromRepo == null)
                 return NotFound();
 
-            // Map to Dto before return...
-            return Ok(smiteFromRepo);
+            var smiteForPerson = Mapper.Map<SmiteDto>(smiteFromRepo);
+            return Ok(smiteForPerson);
         }
     }
 }

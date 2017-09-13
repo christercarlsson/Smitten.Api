@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System;
 using Smitten.Api.Services;
+using AutoMapper;
+using Smitten.Api.Models;
+using System.Collections.Generic;
 
 namespace Smitten.Api.Controllers
 {
@@ -18,18 +21,22 @@ namespace Smitten.Api.Controllers
         [HttpGet]
         public IActionResult GetPeople()
         {
-            return Ok(_repository.GetPeople());
+            var peopleFromRepo = _repository.GetPeople();
+
+            var people = Mapper.Map<IEnumerable<PersonDto>>(peopleFromRepo);
+            return Ok(people);
         }
 
         [HttpGet("{id}")]
         public IActionResult GetPerson(Guid id)
         {
-            var result = _repository.GetPerson(id);
-            if (result == null)
+            var personFromRepo = _repository.GetPerson(id);
+            if (personFromRepo == null)
             {
                 return NotFound();
             }
-            return Ok(result);
+            var person = Mapper.Map<PersonDto>(personFromRepo);
+            return Ok(person);
         }
 
     }

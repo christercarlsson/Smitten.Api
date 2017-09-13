@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Smitten.Api.Entities;
 using Microsoft.EntityFrameworkCore;
 using Smitten.Api.Services;
+using Smitten.Api.Models;
 
 namespace Smitten.Api
 {
@@ -53,6 +54,14 @@ namespace Smitten.Api
                 app.UseDeveloperExceptionPage();
                 smittenContext.EnsureSeedDataForDevelopment();
             }
+
+            AutoMapper.Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<Person, PersonDto>()
+                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"));
+                cfg.CreateMap<Smite, SmiteDto>();
+            });
+
             app.UseMvc();
         }
     }
