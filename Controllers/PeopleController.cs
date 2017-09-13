@@ -22,7 +22,11 @@ namespace Smitten.Api.Controllers
         [HttpGet]
         public IActionResult GetPeople()
         {
-            var peopleFromRepo = _repository.GetPeople();
+            var peopleFromRepo = _repository
+                .GetPeople()
+                .OrderByDescending(p => p.Smites.Count)
+                .ThenBy(p => p.FirstName)
+                .ThenBy(p => p.LastName);
 
             var people = Mapper.Map<IEnumerable<PersonDto>>(peopleFromRepo);
             return Ok(people);
