@@ -11,6 +11,7 @@ namespace Smitten.Api.Entities
     {
         [Key]
         public Guid Id { get; set; }
+        [Required]
         public DateTimeOffset TimeOfSmite { get; set; }
         [ForeignKey("PersonId")]
         public Person Person { get; set; }

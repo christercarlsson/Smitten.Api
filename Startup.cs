@@ -61,6 +61,8 @@ namespace Smitten.Api
                  .ForMember(dest => dest.Name, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"))
                  .ForMember(dest => dest.NumberOfSmites, opt => opt.MapFrom(src => src.Smites.Count));
                 cfg.CreateMap<Smite, SmiteDto>();
+                cfg.CreateMap<PersonForCreationDto, Person>();
+                cfg.CreateMap<SmiteForCreationDto, Smite>();
             });
 
             app.UseMvc();

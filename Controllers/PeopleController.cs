@@ -5,6 +5,7 @@ using Smitten.Api.Services;
 using AutoMapper;
 using Smitten.Api.Models;
 using System.Collections.Generic;
+using Smitten.Api.Entities;
 
 namespace Smitten.Api.Controllers
 {
@@ -27,7 +28,7 @@ namespace Smitten.Api.Controllers
             return Ok(people);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = nameof(GetPerson))]
         public IActionResult GetPerson(Guid id)
         {
             var personFromRepo = _repository.GetPerson(id);
@@ -39,5 +40,26 @@ namespace Smitten.Api.Controllers
             return Ok(person);
         }
 
+        [HttpPost()]
+        public IActionResult CreatePerson([FromBody] PersonForCreationDto person)
+        {
+            if (person == null)
+            {
+                return BadRequest();
+            }
+
+            var personEntity = Mapper.Map<Person>(person);
+
+            _repository.AddPerson(personEntity);
+
+            if (!_repository.Save())
+            {
+                throw new Exception("Creating person failed on save.");
+            }
+
+            var personToReturn = Mapper.Map<PersonDto>(personEntity);
+
+            return CreatedAtRoute(nameof(GetPerson), new { id = personToReturn.Id }, personToReturn);
+        }
     }
 }
