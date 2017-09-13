@@ -5,7 +5,7 @@
 *.suo
 *.user
 *.sln.docstates
-appsettings.*
+appsettings.json
 .vs/
 
 # Build results
@@ -162,6 +162,7 @@ ClientBin/
 *.publishsettings
 node_modules/
 bower_components/
+*.db
 
 # RIA/Silverlight projects
 Generated_Code/

@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define _LINUX
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,15 +31,15 @@ namespace Smitten.Api
         {
             services.AddSingleton(_config);
 
-            services.AddMvc(setupAction => {
+            services.AddMvc(setupAction =>
+            {
                 setupAction.ReturnHttpNotAcceptable = true;
                 setupAction.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
                 setupAction.InputFormatters.Add(new XmlDataContractSerializerInputFormatter());
             });
-            
-            services.AddDbContext<SmittenContext>(o => {
-                o.UseSqlServer(_config["ConnectionStrings:DefaultConnection"]);
-                });
+
+            services.AddDbContext<SmittenContext>(o => o.UseSqlite(_config["ConnectionStrings:Sqlite"]));
+            //            services.AddDbContext<SmittenContext>(o => o.UseSqlServer(_config["ConnectionStrings:DefaultConnection"]));
 
             services.AddScoped<ISmittenRepository, SmittenRepository>();
 
