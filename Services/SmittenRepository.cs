@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Smitten.Api.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Smitten.Api.Services
 {
@@ -19,7 +20,7 @@ namespace Smitten.Api.Services
             person.Id = Guid.NewGuid();
             _context.People.Add(person);
 
-            if(person.Smites.Any())
+            if (person.Smites.Any())
             {
                 foreach (var smite in person.Smites)
                 {
@@ -31,7 +32,7 @@ namespace Smitten.Api.Services
         public void AddSmiteForPerson(Guid personId, Smite smite)
         {
             var person = GetPerson(personId);
-            if(person != null)
+            if (person != null)
             {
                 if (smite.Id == null)
                     smite.Id = Guid.NewGuid();
@@ -51,7 +52,11 @@ namespace Smitten.Api.Services
 
         public IEnumerable<Person> GetPeople()
         {
-            return _context.People.OrderBy(p => p.FirstName).ThenBy(p => p.LastName);
+            return _context.People
+                .Include(p => p.Smites)
+                .OrderByDescending(p => p.Smites.Count)
+                .ThenBy(p => p.FirstName)
+                .ThenBy(p => p.LastName);
         }
 
         public Person GetPerson(Guid personId)

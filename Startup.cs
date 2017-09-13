@@ -58,7 +58,8 @@ namespace Smitten.Api
             AutoMapper.Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<Person, PersonDto>()
-                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"));
+                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"))
+                 .ForMember(dest => dest.NumberOfSmites, opt => opt.MapFrom(src => src.Smites.Count));
                 cfg.CreateMap<Smite, SmiteDto>();
             });
 
