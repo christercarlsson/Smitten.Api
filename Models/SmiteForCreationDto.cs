@@ -6,6 +6,6 @@ namespace Smitten.Api.Models
     public class SmiteForCreationDto
     {
         [Required]
-        public DateTimeOffset Date { get; set; }
+        public DateTimeOffset TimeOfSmite { get; set; }
     }
 }
