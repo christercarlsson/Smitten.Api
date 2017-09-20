@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Smitten.Api.Models;
 using Smitten.Api.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace Smitten.Api.Controllers
 {
@@ -14,17 +15,22 @@ namespace Smitten.Api.Controllers
     public class SmitesController : Controller
     {
         private ISmittenRepository _repository;
+        private ILogger<SmitesController> _logger;
 
-        public SmitesController(ISmittenRepository repository)
+        public SmitesController(ISmittenRepository repository, ILogger<SmitesController> logger)
         {
             _repository = repository;
+            _logger = logger; 
         }
 
         [HttpGet()]
         public IActionResult GetSmitesForPerson(Guid personId)
         {
-            if (!_repository.PersonExists(personId))
+            _logger.LogInformation(100, $"Getting smite for {personId}");
+            if (!_repository.PersonExists(personId)) {
+                _logger.LogInformation(404, $"{nameof(GetSmitesForPerson)}(Guid {personId}) not found");
                 return NotFound();
+            }
             var smitesFromRepo = _repository.GetSmitesForPerson(personId);
 
             var smitesForPerson = Mapper.Map<IEnumerable<SmiteDto>>(smitesFromRepo);
